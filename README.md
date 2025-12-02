@@ -1,184 +1,97 @@
-# Node.js Express API with TypeScript
+# MM Server
 
-A robust, secure, and scalable REST API built with Node.js, Express, and TypeScript. This project includes authentication, user management, and comprehensive API documentation.
+A Node.js Express API built with TypeScript, Prisma, and PostgreSQL.
 
-## Features
+## Quick Start
 
-- 🔐 **Authentication & Authorization**
-  - JWT-based authentication
-  - Role-based access control
-  - Password reset functionality
-  - Secure password hashing
-
-- 🛡️ **Security**
-  - CORS protection
-  - Helmet security headers
-  - Rate limiting
-  - Input validation
-  - XSS protection
-
-- 📚 **API Documentation**
-  - Swagger/OpenAPI documentation
-  - Interactive API explorer
-  - Request/response schemas
-  - Authentication requirements
-
-- 🏗️ **Architecture**
-  - Clean architecture
-  - Dependency injection
-  - Middleware-based security
-  - Error handling
-  - Environment configuration
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-- PostgreSQL database
-
-## Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone <repository-url>
-   cd my-app
-   ```
-
-2. Install dependencies:
+1. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-3. Create a `.env` file in the root directory:
+2. **Set up environment variables:**
+   Create a `.env` file:
 
    ```env
-   # Server
    NODE_ENV=development
-   PORT=3000
-   CORS_ORIGINS=http://localhost:3000,http://localhost:5555
-
-   # Database
-   DATABASE_URL=postgresql://username:password@localhost:5432/database_name
-
-   # Authentication
+   PORT=5001
+   DATABASE_URL=postgresql://username:password@localhost:5432/fibre52
    JWT_SECRET=your-secret-key
+   JWT_REFRESH_SECRET=your-refresh-secret
    ```
 
-4. Start the development server:
+3. **Run database migrations:**
+
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+4. **Seed the database:**
+
+   ```bash
+   npx prisma db seed
+   ```
+
+5. **Start development server:**
+
    ```bash
    npm run dev
+
+   or
+
+   yarn dev
    ```
 
-## API Documentation
+The server will start at `http://localhost:5000`
 
-Access the API documentation at `http://localhost:3000/api-docs`. The documentation includes:
+## API Endpoints
 
-- Authentication endpoints
-- User management endpoints
-- Request/response schemas
-- Authentication requirements
-- Example requests
+### Products
 
-## Security Features
+- `GET /api/products?limit=10` - Get all products (optional limit)
+- `GET /api/products/categories` - Get all categories
+- `GET /api/products/category/:category?limit=10` - Get products by category
+- `GET /api/products/:id` - Get single product
 
-### CORS Configuration
+## Scripts
 
-```typescript
-cors({
-  origin: config.server.corsOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Content-Range', 'X-Content-Range'],
-  credentials: true,
-  maxAge: 86400,
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-})
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start            # Start production server
+npx prisma studio    # Open Prisma Studio (database GUI)
 ```
 
-### Helmet Security Headers
+## Tech Stack
 
-```typescript
-helmet({
-  xssFilter: true,
-  hidePoweredBy: true,
-  frameguard: { action: 'deny' },
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", 'data:', 'https:'],
-    },
-  },
-})
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build the project
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run test` - Run tests
-- `npm run test:watch` - Run tests in watch mode
-- `npm run test:coverage` - Run tests with coverage
+- **Runtime:** Node.js with TypeScript
+- **Framework:** Express.js
+- **Database:** PostgreSQL with Prisma ORM
+- **Authentication:** JWT
+- **Validation:** Zod
 
 ## Project Structure
 
 ```
 src/
-├── config/         # Configuration files
-├── controllers/    # Route controllers
-├── docs/          # API documentation
-├── middlewares/   # Custom middlewares
-├── models/        # Database models
-├── routes/        # API routes
-├── services/      # Business logic
-├── types/         # TypeScript types
-├── utils/         # Utility functions
-├── app.ts         # Express app setup
-└── server.ts      # Server entry point
+├── app/
+│   ├── Modules/
+│   │
+│   │   ├── products/       # Products module
+│   │
+│   └── middleware/         # Express middlewares
+├── config/                 # Configuration files
+├── shared/                 # Shared utilities
+└── server.ts              # Entry point
+
+prisma/
+├── schema.prisma          # Database schema
+├── seed.ts               # Database seeding
+└── config.ts             # Seed data
 ```
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/v1/auth/login` - User login
-- `POST /api/v1/auth/register` - User registration
-- `POST /api/v1/auth/forgot-password` - Request password reset
-
-### User Management
-
-- `GET /api/v1/users/{userId}` - Get user details
-- `PUT /api/v1/users/{userId}` - Update user details
-
-## Error Handling
-
-The API uses a standardized error response format:
-
-```typescript
-{
-  success: false,
-  message: string,
-  errors?: {
-    code: string,
-    details?: Record<string, string>
-  }
-}
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT

@@ -1,5 +1,5 @@
 {
-  "name": "backend-template",
+  "name": "mm-server",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.ts",
