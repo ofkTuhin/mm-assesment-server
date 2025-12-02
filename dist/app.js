@@ -39,11 +39,20 @@ const routes_1 = __importDefault(require("./app/routes/routes"));
 const app = (0, express_1.default)();
 // middleware
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'https://fibre52-trial.vercel.app'],
+    origin: [
+        'http://localhost:3000',
+        'https://fibre52-trial.vercel.app',
+        'https://trial.fibre52.omarfarukkhan.com',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'set-token', 'reset-token'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'set-token', 'reset-token', 'Set-Cookie'],
     credentials: true,
 }));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+});
+app.set('trust proxy', 1);
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
